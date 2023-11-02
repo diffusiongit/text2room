@@ -1,3 +1,22 @@
+# How To Use Layout Control
+
+1. Create a ```trajectory.json``` file similar to ```model/trajectories/examples/layout-control/cyberpunk_bedroom.json```
+
+2. In the ```trajectory.json``` file, modify the prompt of the first trajectory to match what you want to see in the front-facing image.
+
+3. In the file ```model/text2room_pipeline.py``` modify the prompts in lines 550-600 in the method ```forward()```. You have to specify one prompt per view-direction and a general prompt-prefix and prompt-suffix. The comments specify where each camera looks (see image below).
+
+Explanation of viewing directions:
+
+We sample cameras that look into different directions.
+Depending on which direction the camera looks, we use different prompts.
+In total, the first 20 cameras specify the complete room layout and the rest is only used to fill-in the remaining holes.
+Below image explains where the ```i-th``` camera looks.
+Depending on which layout you want, you should modify the prompt for the ```i-th``` camera.
+Note: for the ```0-th``` camera, the prompt is specified in the ```trajectory.json``` file. For the ```1st-20th``` camera, the prompt is specified in the code.
+
+![Layout-Control](docs/layout-control-overview.png "Layout-Control")
+
 # Text2Room
 Text2Room generates textured 3D meshes from a given text prompt using 2D text-to-image models.
 

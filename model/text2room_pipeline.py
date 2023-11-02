@@ -547,6 +547,58 @@ class Text2RoomPipeline(torch.nn.Module):
         self.world_to_cam = self.get_next_pose_in_trajectory(pos)
         self.seen_poses.append(self.world_to_cam.clone())
 
+        N = pos + offset
+        prompt_prefix = "Editorial Style Photo, Cyberpunk Room"
+        prompt_suffix = "Wide Shot, 4k --ar 16:9"
+        if N > 0 and N < 6:
+            # front --> side view right (0-45 degree)
+            self.args.prompt = f"{prompt_prefix}, Fireplace, {prompt_suffix}"
+            print("generate side-view right with prompt", self.args.prompt)
+        if N > 5 and N < 11:
+            # front --> side view left (315-360 degree)
+            self.args.prompt = f"{prompt_prefix}, Bookshelf, {prompt_suffix}"
+            print("generate side-view left with prompt", self.args.prompt)
+        if N == 11:
+            # front view (== 0 degree)
+            self.args.prompt = f"{prompt_prefix}, Bed, Nightstand, Picture, {prompt_suffix}"
+            print("generate front-view with prompt", self.args.prompt)
+        if N == 12:
+            # front view / side view left (== -36 degree)
+            self.args.prompt = f"{prompt_prefix}, Bed, Nightstand, Bookshelf, {prompt_suffix}"
+            print("generate -36 degree with prompt", self.args.prompt)
+        if N == 13:
+            # side view left (== -72 degree)
+            self.args.prompt = f"{prompt_prefix}, Bookshelf, {prompt_suffix}"
+            print("generate -72 degree with prompt", self.args.prompt)
+        if N == 14:
+            # back view / side view left (== -108 degree)
+            self.args.prompt = f"{prompt_prefix}, Bookshelf, {prompt_suffix}"
+            print("generate -108 degree with prompt", self.args.prompt)
+        if N == 15:
+            # back view / side view left (== -144 degree)
+            self.args.prompt = f"{prompt_prefix}, Bookshelf, TV, Cabinet, {prompt_suffix}"
+            print("generate -144 degree with prompt", self.args.prompt)
+        if N == 16:
+            # back view (== -180 degree)
+            self.args.prompt = f"{prompt_prefix}, TV, Cabinet, {prompt_suffix}"
+            print("generate -180 degree with prompt", self.args.prompt)
+        if N == 17:
+            # back view / side view right (== -216 degree)
+            self.args.prompt = f"{prompt_prefix}, TV, Cabinet, Door, {prompt_suffix}"
+            print("generate -216 degree with prompt", self.args.prompt)
+        if N == 18:
+            # side view right (== -252 degree)
+            self.args.prompt = f"{prompt_prefix}, Door, Fireplace, {prompt_suffix}"
+            print("generate -252 degree with prompt", self.args.prompt)
+        if N == 19:
+            # side view right (== -288 degree)
+            self.args.prompt = f"{prompt_prefix}, Fireplace, Nightstand, {prompt_suffix}"
+            print("generate -288 degree with prompt", self.args.prompt)
+        if N == 20:
+            # side view right (== -324 degree)
+            self.args.prompt = f"{prompt_prefix}, Fireplace, Nightstand, {prompt_suffix}"
+            print("generate -324 degree with prompt", self.args.prompt)
+
         # render --> inpaint --> add to 3D structure
         self.project_and_inpaint(pos, offset, save_files)
 
